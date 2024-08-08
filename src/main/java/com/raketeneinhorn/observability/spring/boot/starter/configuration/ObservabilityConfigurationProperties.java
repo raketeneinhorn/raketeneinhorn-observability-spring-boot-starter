@@ -13,6 +13,4 @@ public class ObservabilityConfigurationProperties {
 
     public static final String PREFIX = "raketeneinhorn.observability";
 
-    private String foo;
-
 }
