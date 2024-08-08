@@ -2,7 +2,7 @@ plugins {
 	id 'java-library'
 	id 'jacoco'
 	alias(libs.plugins.axion.release)
-//	alias(libs.plugins.sonarqube)
+	alias(libs.plugins.sonarqube)
 	alias(libs.plugins.springframework.boot) apply false
 	alias(libs.plugins.lombok)
 }
@@ -33,11 +33,10 @@ jacocoTestReport {
 	}
 }
 
-/*sonar {
+sonar {
 	properties {
-		property "sonar.projectKey", "raketeneinhorn_raketeneinhorn-spring-boot-fakeservice-demo"
+		property "sonar.projectKey", "raketeneinhorn_raketeneinhorn-observability-spring-boot-starter"
 		property "sonar.organization", "raketeneinhorn"
 		property "sonar.host.url", "https://sonarcloud.io"
-		property "sonar.coverage.jacoco.xmlReportPaths", testCodeCoverageReport.reports.xml.outputLocation.get().asFile.toString()
 	}
-}*/
+}
