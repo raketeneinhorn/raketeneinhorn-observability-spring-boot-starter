@@ -1,0 +1,9 @@
+= Raketeneinhorn Observability Spring Boot Starter
+Benjamin Boksa
+:toc:
+:toclevels: 3
+
+== License
+
+Raketeneinhorn Observability Spring Boot Starter is Open Source software released under the
+https://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0 license].
