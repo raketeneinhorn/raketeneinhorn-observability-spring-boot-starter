@@ -1,15 +1,17 @@
 plugins {
 	id 'java-library'
 	id 'jacoco'
-//	alias(libs.plugins.spring)
-//	id 'org.springframework.boot'
-//	id 'io.spring.dependency-management'
-	id "org.sonarqube" version "5.1.0.4882"
+	alias(libs.plugins.axion.release)
+	alias(libs.plugins.sonarqube)
+	alias(libs.plugins.springframework.boot)
+	alias(libs.plugins.lombok)
 }
 
+apply plugin: 'io.spring.dependency-management'
+
+
 group = 'com.raketeneinhorn.observability.spring.boot.starter'
-version = '0.0.1-SNAPSHOT'
-//version = scmVersion.version
+version = scmVersion.version
 
 java {
 	toolchain {
