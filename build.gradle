@@ -2,7 +2,7 @@ plugins {
 	id 'java-library'
 	id 'jacoco'
 	alias(libs.plugins.axion.release)
-	alias(libs.plugins.sonarqube)
+//	alias(libs.plugins.sonarqube)
 	alias(libs.plugins.springframework.boot) apply false
 	alias(libs.plugins.lombok)
 }
