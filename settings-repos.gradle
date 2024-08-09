@@ -4,12 +4,19 @@ var gpr_key = (hasProperty('gpr.key') ? getProperty('gpr.key') : null) ?: System
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
-        maven {
-            name = "GitHubPackages"
-            url = "https://maven.pkg.github.com/raketeneinhorn/raketeneinhorn-gradle-version-catalog"
-            credentials {
-                username = gpr_user
-                password = gpr_key
+
+        def repoUrls = [
+            "https://maven.pkg.github.com/raketeneinhorn/raketeneinhorn-gradle-version-catalog"
+        ]
+
+        for (repoUrl in repoUrls) {
+            maven {
+                name = repoUrl
+                url = repoUrl
+                credentials {
+                    username = gpr_user
+                    password = gpr_key
+                }
             }
         }
     }
