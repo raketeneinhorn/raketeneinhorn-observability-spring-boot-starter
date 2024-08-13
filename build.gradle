@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
 plugins {
 	id 'java-library'
 	id 'jacoco'
@@ -6,14 +8,6 @@ plugins {
 	alias(libs.plugins.sonarqube)
 	alias(libs.plugins.springframework.boot) apply false
 	alias(libs.plugins.lombok)
-}
-
-apply plugin: 'io.spring.dependency-management'
-
-dependencyManagement {
-	imports {
-		mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
-	}
 }
 
 group = 'com.raketeneinhorn.observability.spring.boot.starter'
@@ -26,7 +20,13 @@ java {
 }
 
 dependencies {
+	implementation platform(SpringBootPlugin.BOM_COORDINATES)
+
 	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+
 	runtimeOnly libs.logstash.logback.encoder
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
