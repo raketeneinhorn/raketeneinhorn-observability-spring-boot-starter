@@ -13,7 +13,7 @@ import java.util.Map;
 @Order
 public class ObservabilityEnvironmentPostProcessor implements EnvironmentPostProcessor {
 
-    private final static String BANNER_MODE_PROPERTY_KEY = "spring.main.banner-mode";
+    protected final static String BANNER_MODE_PROPERTY_KEY = "spring.main.banner-mode";
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
