@@ -2,7 +2,7 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <springProperty scope="context" name="springApplicationName" source="spring.application.name"/>
-    <!-- Example for logging into the build folder of your project -->
+    <!-- Example for logging into your project's folder -->
     <property name="LOG_FILE" value="${LOGS_FOLDER:-logs}/${springApplicationName}"/>
 
     <springProfile name="local">
@@ -44,33 +44,37 @@
 
     </springProfile>
 
-    <!-- Appender to log JSON to console -->
-    <appender name="logstash-console" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
-            <providers>
-                <timestamp>
-                    <timeZone>UTC</timeZone>
-                </timestamp>
-                <pattern>
+    <springProfile name="!local">
+
+        <!-- Appender to log JSON to console -->
+        <appender name="logstash-console" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+                <providers>
+                    <timestamp>
+                        <timeZone>UTC</timeZone>
+                    </timestamp>
                     <pattern>
-                        {
-                        "timestamp": "@timestamp",
-                        "severity": "%level",
-                        "service": "${applicationName:-}",
-                        "trace": "%X{traceId:-}",
-                        "span": "%X{spanId:-}",
-                        "pid": "${PID:-}",
-                        "thread": "%thread",
-                        "class": "%logger",
-                        "message": "%message",
-                        "exception": "%exception"
-                        }
+                        <pattern>
+                            {
+                            "timestamp": "@timestamp",
+                            "severity": "%level",
+                            "service": "${applicationName:-}",
+                            "trace": "%X{traceId:-}",
+                            "span": "%X{spanId:-}",
+                            "pid": "${PID:-}",
+                            "thread": "%thread",
+                            "class": "%logger",
+                            "message": "%message",
+                            "exception": "%exception"
+                            }
+                        </pattern>
                     </pattern>
-                </pattern>
-                <arguments/>
-            </providers>
-        </encoder>
-    </appender>
+                    <arguments/>
+                </providers>
+            </encoder>
+        </appender>
+
+    </springProfile>
 
     <springProfile name="local">
         <root level="INFO">
