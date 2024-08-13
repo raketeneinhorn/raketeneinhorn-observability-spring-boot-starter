@@ -5,18 +5,12 @@ dependencyResolutionManagement {
     repositories {
         mavenCentral()
 
-        def repoUrls = [
-            "https://maven.pkg.github.com/raketeneinhorn/raketeneinhorn-gradle-version-catalog"
-        ]
-
-        for (repoUrl in repoUrls) {
-            maven {
-                name = repoUrl
-                url = repoUrl
-                credentials {
-                    username = gpr_user
-                    password = gpr_key
-                }
+        maven {
+            name = "https://maven.pkg.github.com/raketeneinhorn/raketeneinhorn-gradle-version-catalog"
+            url = "https://maven.pkg.github.com/raketeneinhorn/raketeneinhorn-gradle-version-catalog"
+            credentials {
+                username = gpr_user
+                password = gpr_key
             }
         }
     }
