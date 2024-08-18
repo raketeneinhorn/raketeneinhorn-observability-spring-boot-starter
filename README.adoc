@@ -3,6 +3,8 @@ Benjamin Boksa
 :toc:
 :toclevels: 3
 
+Spring Boot Starter that bundles opinionated configurations for projects aiming to enhance observability.
+
 == License
 
 Raketeneinhorn Observability Spring Boot Starter is Open Source software released under the
