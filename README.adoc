@@ -3,6 +3,80 @@ Benjamin Boksa
 :toc:
 :toclevels: 3
 
+Spring Boot Starter that bundles opinionated configurations for projects aiming to enhance observability.
+
+== Motivation
+
+Observability is a key aspect of any system, particularly in distributed systems. When building distributed systems, it
+can be beneficial to define a common observation setup across multiple projects, such as having a shared tracing
+endpoint. This starter aims to provide such a setup as code, following the agile idea of
+https://agilemanifesto.org["Working software over comprehensive documentation"].
+
+== Features
+
+=== Common Logback configuration
+
+The starter contains the necessary dependencies for plain console and JSON logging. It also contains a
+link:src/main/resources/logback-spring.xml[common logback configuration]
+which is automatically picked up by Spring Boot applications using this starter.
+
+This configuration offers to ways of logging.
+
+==== Local logging (standard log format)
+
+To enable local logging the Spring Boot profile `local` must be used. In addition to the plain console layout JSON is
+written to a local file in `logs/${spring.application.name}.json`.
+
+==== Deployment logging (JSON logs)
+
+If the Spring Boot profile `local` is not active JSON is written to the console.
+
+=== Standard error messages based on RFC 7807
+
+https://datatracker.ietf.org/doc/html/rfc7807[RFC 7807] defines a standard error response format for HTTP APIs.
+Spring Boot's
+https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/servlet/mvc/method/annotation/ResponseEntityExceptionHandler.html[`ResponseEntityExceptionHandler`]
+is an
+https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/ExceptionHandler.html[`@ExceptionHandler`]
+that automatically creates error responses according to that format and is registered as a
+https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/ControllerAdvice.html[`@ControllerAdvice`].
+A
+link:src/main/java/com/raketeneinhorn/observability/spring/boot/starter/exception/SimpleResponseEntityExceptionHandler.java[`SimpleResponseEntityExceptionHandler`]
+extending ResponseEntityExceptionHandler is automatically registered by this starter (see
+link:src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports[Autoconfiguration imports]
+and
+link:src/main/java/com/raketeneinhorn/observability/spring/boot/starter/exception/configuration/ObservabilityExceptionConfiguration.java[`ObservabilityExceptionConfiguration`]).
+
+=== Opinionated Spring Boot settings
+
+link:src/main/java/com/raketeneinhorn/observability/spring/boot/starter/environment/ObservabilityEnvironmentPostProcessor.java[`ObservabilityEnvironmentPostProcessor`]
+is an
+https://docs.spring.io/spring-boot/api/java/org/springframework/boot/env/EnvironmentPostProcessor.html[`EnvironmentPostProcessor`]
+that automatically suppresses the typical Spring Boot banner during startup.
+
+NOTE: More opinionated settings will be added to the ObservabilityEnvironmentPostProcessor soon™.
+
+== Usage
+
+=== Common Logback configuration and RFC 7807
+
+The
+link:src/main/resources/logback-spring.xml[common logback configuration] and the
+link:src/main/java/com/raketeneinhorn/observability/spring/boot/starter/exception/SimpleResponseEntityExceptionHandler.java[`SimpleResponseEntityExceptionHandler`]
+are automatically configured once the starter is added as a dependency.
+
+=== Opinionated Spring Boot settings
+
+To enable the
+link:src/main/java/com/raketeneinhorn/observability/spring/boot/starter/environment/ObservabilityEnvironmentPostProcessor.java[`ObservabilityEnvironmentPostProcessor`]
+it has to be configured in an application that a dependency on this starter. This is done by adding the file
+`src/main/resources/META-INF/spring.factories` with the following content:
+
+[source,properties]
+----
+org.springframework.boot.env.EnvironmentPostProcessor=com.raketeneinhorn.observability.spring.boot.starter.environment.ObservabilityEnvironmentPostProcessor
+----
+
 == License
 
 Raketeneinhorn Observability Spring Boot Starter is Open Source software released under the
