@@ -7,7 +7,10 @@ Spring Boot Starter that bundles opinionated configurations for projects aiming 
 
 == Motivation
 
-Observability is a key aspect in any system, even more so in distributed systems.
+Observability is a key aspect of any system, particularly in distributed systems. When building distributed systems, it
+can be beneficial to define a common observation setup across multiple projects, such as having a shared tracing
+endpoint. This starter aims to provide such a setup as code, following the agile idea of
+https://agilemanifesto.org["Working software over comprehensive documentation"].
 
 == Features
 
