@@ -9,7 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.core.env.StandardEnvironment;
 
 import static com.raketeneinhorn.observability.spring.boot.starter.environment.ObservabilityEnvironmentPostProcessor.BANNER_MODE_PROPERTY_KEY;
-import static com.raketeneinhorn.observability.spring.boot.starter.environment.ObservabilityEnvironmentPostProcessor.TRACING_SAMPLING_PROPABILITY_PROPERTY_KEY;
+import static com.raketeneinhorn.observability.spring.boot.starter.environment.ObservabilityEnvironmentPostProcessor.TRACING_SAMPLING_PROBABILITY_PROPERTY_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ObservabilityEnvironmentPostProcessorTest {
@@ -40,10 +40,10 @@ class ObservabilityEnvironmentPostProcessorTest {
 
         @Test
         void configuresTracingSamplingPropability() {
-            assertThat(standardEnvironment.getProperty(TRACING_SAMPLING_PROPABILITY_PROPERTY_KEY, Float.class)).isNull();
+            assertThat(standardEnvironment.getProperty(TRACING_SAMPLING_PROBABILITY_PROPERTY_KEY, Float.class)).isNull();
 
             observabilityEnvironmentPostProcessorUnderTest.postProcessEnvironment(standardEnvironment, springApplication);
-            assertThat(standardEnvironment.getProperty(TRACING_SAMPLING_PROPABILITY_PROPERTY_KEY, Float.class)).isEqualTo(0.1F);
+            assertThat(standardEnvironment.getProperty(TRACING_SAMPLING_PROBABILITY_PROPERTY_KEY, Float.class)).isEqualTo(0.1F);
         }
     }
 

@@ -14,7 +14,7 @@ import java.util.Map;
 public class ObservabilityEnvironmentPostProcessor implements EnvironmentPostProcessor {
 
     protected static final String BANNER_MODE_PROPERTY_KEY = "spring.main.banner-mode";
-    protected static final String TRACING_SAMPLING_PROPABILITY_PROPERTY_KEY = "management.tracing.sampling.probability";
+    protected static final String TRACING_SAMPLING_PROBABILITY_PROPERTY_KEY = "management.tracing.sampling.probability";
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
@@ -22,7 +22,7 @@ public class ObservabilityEnvironmentPostProcessor implements EnvironmentPostPro
             ObservabilityEnvironmentPostProcessor.class.getName(),
             Map.of(
                 BANNER_MODE_PROPERTY_KEY, Banner.Mode.OFF,
-                TRACING_SAMPLING_PROPABILITY_PROPERTY_KEY, 0.1F
+                TRACING_SAMPLING_PROBABILITY_PROPERTY_KEY, 0.1F
             )
         );
         environment.getPropertySources().addLast(mapPropertySource);
