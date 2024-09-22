@@ -1,0 +1,1 @@
+org.springframework.boot.env.EnvironmentPostProcessor=com.raketeneinhorn.observability.spring.boot.starter.environment.ObservabilityEnvironmentPostProcessor

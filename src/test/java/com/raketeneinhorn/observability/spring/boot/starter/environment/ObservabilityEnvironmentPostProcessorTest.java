@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.core.env.StandardEnvironment;
+import org.springframework.mock.env.MockEnvironment;
 
 import static com.raketeneinhorn.observability.spring.boot.starter.environment.ObservabilityEnvironmentPostProcessor.BANNER_MODE_PROPERTY_KEY;
 import static com.raketeneinhorn.observability.spring.boot.starter.environment.ObservabilityEnvironmentPostProcessor.TRACING_SAMPLING_PROBABILITY_PROPERTY_KEY;
@@ -14,14 +14,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ObservabilityEnvironmentPostProcessorTest {
 
-    private StandardEnvironment standardEnvironment;
+    private MockEnvironment mockEnvironment;
     private SpringApplication springApplication;
 
     private ObservabilityEnvironmentPostProcessor observabilityEnvironmentPostProcessorUnderTest;
 
     @BeforeEach
     void setUp() {
-        standardEnvironment = new StandardEnvironment();
+        mockEnvironment = new MockEnvironment();
         springApplication = Mockito.mock();
 
         observabilityEnvironmentPostProcessorUnderTest = new ObservabilityEnvironmentPostProcessor();
@@ -31,20 +31,37 @@ class ObservabilityEnvironmentPostProcessorTest {
     class PostProcessEnvironment {
 
         @Test
-        void disablesSpringBootBanner() {
-            assertThat(standardEnvironment.getProperty(BANNER_MODE_PROPERTY_KEY, Banner.Mode.class)).isNull();
+        void disablesSpringBootBannerWhenNotSet() {
+            assertThat(mockEnvironment.getProperty(BANNER_MODE_PROPERTY_KEY, Banner.Mode.class)).isNull();
 
-            observabilityEnvironmentPostProcessorUnderTest.postProcessEnvironment(standardEnvironment, springApplication);
-            assertThat(standardEnvironment.getProperty(BANNER_MODE_PROPERTY_KEY, Banner.Mode.class)).isEqualTo(Banner.Mode.OFF);
+            observabilityEnvironmentPostProcessorUnderTest.postProcessEnvironment(mockEnvironment, springApplication);
+            assertThat(mockEnvironment.getProperty(BANNER_MODE_PROPERTY_KEY, Banner.Mode.class)).isEqualTo(Banner.Mode.OFF);
         }
 
         @Test
-        void configuresTracingSamplingPropability() {
-            assertThat(standardEnvironment.getProperty(TRACING_SAMPLING_PROBABILITY_PROPERTY_KEY, Float.class)).isNull();
+        void configuresTracingSamplingProbabilityWhenNotSet() {
+            assertThat(mockEnvironment.getProperty(TRACING_SAMPLING_PROBABILITY_PROPERTY_KEY, Float.class)).isNull();
 
-            observabilityEnvironmentPostProcessorUnderTest.postProcessEnvironment(standardEnvironment, springApplication);
-            assertThat(standardEnvironment.getProperty(TRACING_SAMPLING_PROBABILITY_PROPERTY_KEY, Float.class)).isEqualTo(0.1F);
+            observabilityEnvironmentPostProcessorUnderTest.postProcessEnvironment(mockEnvironment, springApplication);
+            assertThat(mockEnvironment.getProperty(TRACING_SAMPLING_PROBABILITY_PROPERTY_KEY, Float.class)).isEqualTo(1.0F);
         }
+
+        @Test
+        void maintainsSpringBootBannerMode() {
+            mockEnvironment.setProperty(BANNER_MODE_PROPERTY_KEY, "LOG");
+
+            observabilityEnvironmentPostProcessorUnderTest.postProcessEnvironment(mockEnvironment, springApplication);
+            assertThat(mockEnvironment.getProperty(BANNER_MODE_PROPERTY_KEY, Banner.Mode.class)).isEqualTo(Banner.Mode.LOG);
+        }
+
+        @Test
+        void maintainsTracingSamplingPropability() {
+            mockEnvironment.setProperty(TRACING_SAMPLING_PROBABILITY_PROPERTY_KEY, "0.1");
+
+            observabilityEnvironmentPostProcessorUnderTest.postProcessEnvironment(mockEnvironment, springApplication);
+            assertThat(mockEnvironment.getProperty(TRACING_SAMPLING_PROBABILITY_PROPERTY_KEY, Float.class)).isEqualTo(0.1F);
+        }
+
     }
 
 }
