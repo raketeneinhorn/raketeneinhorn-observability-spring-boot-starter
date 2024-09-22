@@ -67,10 +67,9 @@ are automatically configured once the starter is added as a dependency.
 
 === Opinionated Spring Boot settings
 
-To enable the
+This starter contains the
 link:src/main/java/com/raketeneinhorn/observability/spring/boot/starter/environment/ObservabilityEnvironmentPostProcessor.java[`ObservabilityEnvironmentPostProcessor`]
-it has to be configured in an application that a dependency on this starter. This is done by adding the file
-`src/main/resources/META-INF/spring.factories` with the following content:
+which is automatically configured in link:src/main/resources/META-INF/spring.factories[spring.factories].
 
 [source,properties]
 ----
