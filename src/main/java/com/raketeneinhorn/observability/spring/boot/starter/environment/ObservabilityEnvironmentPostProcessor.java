@@ -25,18 +25,17 @@ public class ObservabilityEnvironmentPostProcessor implements EnvironmentPostPro
     protected static final String TRACING_SAMPLING_PROBABILITY_PROPERTY_KEY = "management.tracing.sampling.probability";
     protected static final String LOGGING_STRUCTURED_FORMAT_CONSOLE_PROPERTY_KEY = "logging.structured.format.console";
 
-    List<EnvironmentSpec<?>> environmentSpecs = List.of(
-        new EnvironmentSpec<>(BANNER_MODE_PROPERTY_KEY, Banner.Mode.class, Banner.Mode.OFF, this::alwaysApply),
-        new EnvironmentSpec<>(TRACING_SAMPLING_PROBABILITY_PROPERTY_KEY, Float.class, 1.0F, this::alwaysApply),
-        new EnvironmentSpec<>(LOGGING_STRUCTURED_FORMAT_CONSOLE_PROPERTY_KEY, CommonStructuredLogFormat.class, CommonStructuredLogFormat.LOGSTASH, not(this::isLocalEnvironment))
-
+    List<PropetyDefault<?>> propetyDefaults = List.of(
+        new PropetyDefault<>(BANNER_MODE_PROPERTY_KEY, Banner.Mode.class, Banner.Mode.OFF),
+        new PropetyDefault<>(TRACING_SAMPLING_PROBABILITY_PROPERTY_KEY, Float.class, 1.0F),
+        new PropetyDefault<>(LOGGING_STRUCTURED_FORMAT_CONSOLE_PROPERTY_KEY, CommonStructuredLogFormat.class, CommonStructuredLogFormat.LOGSTASH, not(this::isLocalEnvironment))
     );
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
         Map<String, Object> mapSource = new HashMap<>();
 
-        environmentSpecs.stream()
+        propetyDefaults.stream()
             .filter(es -> es.applyWhen().test(environment))
             .forEach(es -> mapSource.put(
                 es.key(),
@@ -54,16 +53,16 @@ public class ObservabilityEnvironmentPostProcessor implements EnvironmentPostPro
         return Arrays.stream(environment.getActiveProfiles()).anyMatch("local"::equalsIgnoreCase);
     }
 
-    private boolean alwaysApply(Environment environment) {
-        return true;
-    }
-
-    private record EnvironmentSpec<T>(
+    private record PropetyDefault<T>(
         String key,
         Class<T> targetType,
         T defaultValue,
         Predicate<Environment> applyWhen
     ) {
+
+        public PropetyDefault(String key, Class<T> targetType, T defaultValue) {
+            this(key, targetType, defaultValue, e -> true);
+        }
 
         private T effiectiveValueForEnvironment(Environment environment) {
             return environment.getProperty(key, targetType, defaultValue);
