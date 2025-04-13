@@ -14,26 +14,21 @@ https://agilemanifesto.org["Working software over comprehensive documentation"].
 
 == Features
 
-=== Common Logback configuration
+=== Logging configuration
 
-The starter contains the necessary dependencies for plain console and JSON logging. It also contains a
-link:src/main/resources/logback-spring.xml[common logback configuration]
-which is automatically picked up by Spring Boot applications using this starter.
-
-This configuration offers to ways of logging.
+The starter uses Spring Boot's structured logging for both plain console and JSON logging by offering two ways of logging:
 
 ==== Local logging (standard log format)
 
-To enable local logging the Spring Boot profile `local` must be used. In addition to the plain console layout JSON is
-written to a local file in `logs/${spring.application.name}.json`.
+To enable local logging the Spring Boot profile `local` must be used.
 
 ==== Deployment logging (JSON logs)
 
 If the Spring Boot profile `local` is not active JSON is written to the console.
 
-=== Standard error messages based on RFC 7807
+=== Standard error messages based on RFC 9457
 
-https://datatracker.ietf.org/doc/html/rfc7807[RFC 7807] defines a standard error response format for HTTP APIs.
+https://datatracker.ietf.org/doc/html/rfc9457[RFC 9457] defines a standard error response format for HTTP APIs.
 Spring Boot's
 https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/servlet/mvc/method/annotation/ResponseEntityExceptionHandler.html[`ResponseEntityExceptionHandler`]
 is an
@@ -49,6 +44,8 @@ link:src/main/java/com/raketeneinhorn/observability/spring/boot/starter/exceptio
 
 === Opinionated Spring Boot settings
 
+==== Spring Boot Banner
+
 link:src/main/java/com/raketeneinhorn/observability/spring/boot/starter/environment/ObservabilityEnvironmentPostProcessor.java[`ObservabilityEnvironmentPostProcessor`]
 is an
 https://docs.spring.io/spring-boot/api/java/org/springframework/boot/env/EnvironmentPostProcessor.html[`EnvironmentPostProcessor`]
@@ -58,23 +55,21 @@ NOTE: More opinionated settings will be added to the ObservabilityEnvironmentPos
 
 == Usage
 
-=== Common Logback configuration and RFC 7807
+=== Logging configuration
+
+The default is to use JSON logging. To use plain text logging use the Spring Boot profile `local`.
+
+=== Standard error messages based on RFC 9457
 
 The
-link:src/main/resources/logback-spring.xml[common logback configuration] and the
 link:src/main/java/com/raketeneinhorn/observability/spring/boot/starter/exception/SimpleResponseEntityExceptionHandler.java[`SimpleResponseEntityExceptionHandler`]
-are automatically configured once the starter is added as a dependency.
+is automatically configured when the starter is added as a dependency.
 
 === Opinionated Spring Boot settings
 
 This starter contains the
 link:src/main/java/com/raketeneinhorn/observability/spring/boot/starter/environment/ObservabilityEnvironmentPostProcessor.java[`ObservabilityEnvironmentPostProcessor`]
 which is automatically configured in link:src/main/resources/META-INF/spring.factories[spring.factories].
-
-[source,properties]
-----
-org.springframework.boot.env.EnvironmentPostProcessor=com.raketeneinhorn.observability.spring.boot.starter.environment.ObservabilityEnvironmentPostProcessor
-----
 
 == License
 
