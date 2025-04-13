@@ -14,7 +14,7 @@ https://agilemanifesto.org["Working software over comprehensive documentation"].
 
 == Features
 
-=== Common Logback configuration
+=== Logging configuration
 
 The starter uses Spring Boot's structured logging for both plain console and JSON logging by offering two ways of logging:
 
@@ -55,7 +55,11 @@ NOTE: More opinionated settings will be added to the ObservabilityEnvironmentPos
 
 == Usage
 
-=== RFC 9457
+=== Logging configuration
+
+The default is to use JSON logging. To use plain text logging use the Spring Boot profile `local`.
+
+=== Standard error messages based on RFC 9457
 
 The
 link:src/main/java/com/raketeneinhorn/observability/spring/boot/starter/exception/SimpleResponseEntityExceptionHandler.java[`SimpleResponseEntityExceptionHandler`]
@@ -66,11 +70,6 @@ is automatically configured when the starter is added as a dependency.
 This starter contains the
 link:src/main/java/com/raketeneinhorn/observability/spring/boot/starter/environment/ObservabilityEnvironmentPostProcessor.java[`ObservabilityEnvironmentPostProcessor`]
 which is automatically configured in link:src/main/resources/META-INF/spring.factories[spring.factories].
-
-[source,properties]
-----
-org.springframework.boot.env.EnvironmentPostProcessor=com.raketeneinhorn.observability.spring.boot.starter.environment.ObservabilityEnvironmentPostProcessor
-----
 
 == License
 
